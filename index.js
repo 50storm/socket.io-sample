@@ -12,13 +12,19 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  // console.log(socket);
+    io.emit("chat message", "Hi! New User!")  //送信元含む全員に送信
+    socket.on('chat message', function(msg){
+        io.emit('chat message', msg); //送信元含む全員に送信
+        // socket.broadcast.emit("chat message", msg)　//送信元以外の全員に送信
+    });
+
     socket.on('disconnect', function(){
         console.log('user disconnected');
     });
-    socket.on('chat message', function(msg){
-        console.log('message: ' + msg);
-    });
+
 });
+
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
